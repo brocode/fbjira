@@ -1,0 +1,19 @@
+[package]
+name = "fbjira"
+version = "0.1.0"
+authors = ["icepuma <icepuma@godda.mn>"]
+description = "Command line interface for jira"
+license = "WTFPL"
+categories = ["command-line-utilities"]
+readme = "README.md"
+repository = "https://github.com/brocode/fbjira"
+keywords = ["cli", "automation", "developer-tools", "jira"]
+
+[dependencies]
+goji = "0.2"
+clap = "2.31.2"
+toml = "0.4.6"
+serde = "1.0.37"
+serde_derive = "1.0.37"
+serde_json = "1.0.13"
+colored = "1.6"
