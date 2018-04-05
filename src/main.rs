@@ -22,8 +22,10 @@ fn main() {
     .about(crate_description!())
     .author(crate_authors!())
     .global_setting(AppSettings::ColoredHelp)
+    .setting(AppSettings::SubcommandRequired)
     .subcommand(
       SubCommand::with_name("issue")
+        .setting(AppSettings::SubcommandRequired)
         .about("Work with issues (List open issues, get summary for a specific issue...)")
         .subcommand(
           SubCommand::with_name("list-open")
