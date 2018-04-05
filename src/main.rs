@@ -38,7 +38,7 @@ fn main() {
     )
     .get_matches();
 
-  let jira: Jira = Jira::new(config.jira_host, Credentials::Basic(config.jira_user, config.jira_token)).expect("JIRA...");
+  let jira: Jira = Jira::new(config.jira_host, Credentials::Basic(config.jira_user, config.jira_token)).expect("Setup of JIRA client failed");
 
   if let Some(matches) = matches.subcommand_matches("issue") {
     if let Some(matches) = matches.subcommand_matches("list-open") {
@@ -60,7 +60,7 @@ fn main() {
     }
 
     if let Some(matches) = matches.subcommand_matches("summary") {
-      let issue: Issue = jira.issues().get(matches.value_of("ISSUE").unwrap()).expect("");
+      let issue: Issue = jira.issues().get(matches.value_of("ISSUE").unwrap()).expect("Retrieving of issue did not work");
 
       println!(
         "{}\n\n{}",
