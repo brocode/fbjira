@@ -1,6 +1,6 @@
 # fbjira
 
-[WIP] get 
+[WIP] get more stuff working...
 
 * Config lives @ `~/.fbjira.toml`:
 
