@@ -10,9 +10,8 @@ extern crate toml;
 extern crate colored;
 
 use clap::{App, AppSettings, Arg, SubCommand};
-use colored::*;
 use config::Config;
-use goji::{Credentials, Issue, Jira, SearchOptionsBuilder};
+use goji::Jira;
 
 fn main() {
   let config: Config = config::load().expect("Could not load config.");
@@ -33,6 +32,11 @@ fn main() {
             .arg(Arg::with_name("PROJECT").required(true)),
         )
         .subcommand(
+          SubCommand::with_name("list-all")
+            .about("List all issues !!! Takes a really long time !!!")
+            .arg(Arg::with_name("PROJECT").required(true)),
+        )
+        .subcommand(
           SubCommand::with_name("summary")
             .about("Get a summary for a given issue key")
             .arg(Arg::with_name("ISSUE").required(true)),
@@ -40,38 +44,33 @@ fn main() {
     )
     .get_matches();
 
-  let jira: Jira = Jira::new(config.jira_host, Credentials::Basic(config.jira_user, config.jira_token)).expect("Setup of JIRA client failed");
+  let jira: Jira = jira::jira_client(config);
 
   if let Some(matches) = matches.subcommand_matches("issue") {
     if let Some(matches) = matches.subcommand_matches("list-open") {
-      let search_options = SearchOptionsBuilder::new().max_results(1000).build();
+      let project = matches.value_of("PROJECT").unwrap().to_string();
 
-      let results = jira
-        .search()
-        .iter(
-          format!("project = {} AND status != Done ORDER BY key DESC", matches.value_of("PROJECT").unwrap()),
-          &search_options,
-        )
-        .expect("Call to JIRA did not work");
+      for issue_with_summary in jira::list_open(&jira, &project) {
+        println!("{}", issue_with_summary)
+      }
+    }
 
-      let issues: Vec<(String, Option<String>)> = results.into_iter().map(|issue| (issue.key.to_owned(), issue.summary())).collect();
+    if let Some(matches) = matches.subcommand_matches("list-all") {
+      let project = matches.value_of("PROJECT").unwrap().to_string();
 
-      for (key, summary) in issues {
-        println!("{} {}", key, summary.unwrap_or_default());
+      for issue_with_summary in jira::list_all(&jira, &project) {
+        println!("{}", issue_with_summary)
       }
     }
 
     if let Some(matches) = matches.subcommand_matches("summary") {
-      let issue: Issue = jira.issues().get(matches.value_of("ISSUE").unwrap()).expect("Retrieving of issue did not work");
+      let issue = matches.value_of("ISSUE").unwrap().to_string();
 
-      println!(
-        "{}\n\n{}",
-        &issue.summary().unwrap_or_default().bold().on_black().white(),
-        issue.description().unwrap_or_default(),
-      );
+      println!("{}", jira::summary(&jira, &issue))
     }
   }
 }
 
 mod config;
 mod errors;
+mod jira;
