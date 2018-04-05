@@ -52,10 +52,10 @@ fn main() {
         )
         .expect("Call to JIRA did not work");
 
-      let issues: Vec<String> = results.into_iter().map(|issue| issue.key).collect();
+      let issues: Vec<(String, Option<String>)> = results.into_iter().map(|issue| (issue.key.to_owned(), issue.summary())).collect();
 
-      for key in issues {
-        println!("{}", key);
+      for (key, summary) in issues {
+        println!("{} {}", key, summary.unwrap_or_default());
       }
     }
 
