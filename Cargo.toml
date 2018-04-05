@@ -1,6 +1,6 @@
 [package]
 name = "fbjira"
-version = "0.1.1-alpha.0"
+version = "0.1.1"
 authors = ["icepuma <icepuma@godda.mn>"]
 description = "Command line interface for jira"
 license = "WTFPL"
