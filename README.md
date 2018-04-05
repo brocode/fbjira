@@ -1,6 +1,6 @@
 # fbjira
 
-[[https://crates.io/crates/fbjira][file:https://img.shields.io/crates/v/fbjira.svg]]
+[![Crates](file:https://img.shields.io/crates/v/fbjira.svg)](https://crates.io/crates/fbjira)
 
 [WIP] get more stuff working...
 
