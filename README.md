@@ -1,5 +1,7 @@
 # fbjira
 
+[[https://crates.io/crates/fbjira][file:https://img.shields.io/crates/v/fbjira.svg]]
+
 [WIP] get more stuff working...
 
 * Config lives @ `~/.fbjira.toml`:
