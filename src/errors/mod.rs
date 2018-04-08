@@ -6,6 +6,7 @@ use toml;
 
 #[derive(Debug)]
 pub enum AppError {
+  RuntimeError(String),
   IO(io::Error),
   TOML(toml::de::Error),
   JIRA(goji::Error),
@@ -14,6 +15,7 @@ pub enum AppError {
 impl fmt::Display for AppError {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     match *self {
+      AppError::RuntimeError(ref str) => write!(f, "Runtime error: {}", str),
       AppError::IO(ref err) => write!(f, "IO error: {}", err),
       AppError::TOML(ref err) => write!(f, "TOML error: {}", err),
       AppError::JIRA(ref err) => write!(f, "JIRA error: {}", err),
@@ -24,6 +26,7 @@ impl fmt::Display for AppError {
 impl Error for AppError {
   fn description(&self) -> &str {
     match *self {
+      AppError::RuntimeError(ref str) => str.as_ref(),
       AppError::IO(ref err) => err.description(),
       AppError::TOML(ref err) => err.description(),
       AppError::JIRA(ref err) => err.description(),
@@ -32,6 +35,7 @@ impl Error for AppError {
 
   fn cause(&self) -> Option<&Error> {
     match *self {
+      AppError::RuntimeError(_) => None,
       AppError::IO(ref err) => Some(err),
       AppError::TOML(ref err) => Some(err),
       AppError::JIRA(ref err) => Some(err),

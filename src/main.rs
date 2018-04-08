@@ -14,14 +14,18 @@ use config::Config;
 use goji::Jira;
 
 fn main() {
-  let config: Config = config::load().expect("Could not load config.");
-
   let matches = App::new(crate_name!())
     .version(crate_version!())
     .about(crate_description!())
     .author(crate_authors!())
     .global_setting(AppSettings::ColoredHelp)
     .setting(AppSettings::SubcommandRequired)
+    .subcommand(
+      SubCommand::with_name("config")
+        .setting(AppSettings::SubcommandRequired)
+        .about("All about managing your fbjira config")
+        .subcommand(SubCommand::with_name("init").about("Creates an empty config file in your home directory")),
+    )
     .subcommand(
       SubCommand::with_name("issue")
         .setting(AppSettings::SubcommandRequired)
@@ -44,9 +48,19 @@ fn main() {
     )
     .get_matches();
 
-  let jira: Jira = jira::jira_client(config);
+  if let Some(matches) = matches.subcommand_matches("config") {
+    if matches.subcommand_matches("init").is_some() {
+       match config::init() {
+         Err(e) => println!("{}", e),
+         Ok(_) => println!("Config file successfully created")
+       }
+    }
+  }
 
   if let Some(matches) = matches.subcommand_matches("issue") {
+    let config: Config = config::load().expect("Could not load config.");
+    let jira: Jira = jira::jira_client(config);
+
     if let Some(matches) = matches.subcommand_matches("list-open") {
       let project = matches.value_of("PROJECT").unwrap().to_string();
 
