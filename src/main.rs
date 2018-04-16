@@ -33,12 +33,12 @@ fn main() {
         .subcommand(
           SubCommand::with_name("list-open")
             .about("List all open issues")
-            .arg(Arg::with_name("PROJECT").required(true)),
+            .arg(Arg::with_name("PROJECT").multiple(true).required(true)),
         )
         .subcommand(
           SubCommand::with_name("list-all")
             .about("List all issues !!! Takes a really long time !!!")
-            .arg(Arg::with_name("PROJECT").required(true)),
+            .arg(Arg::with_name("PROJECT").multiple(true).required(true)),
         )
         .subcommand(
           SubCommand::with_name("summary")
@@ -50,10 +50,10 @@ fn main() {
 
   if let Some(matches) = matches.subcommand_matches("config") {
     if matches.subcommand_matches("init").is_some() {
-       match config::init() {
-         Err(e) => println!("{}", e),
-         Ok(_) => println!("Config file successfully created")
-       }
+      match config::init() {
+        Err(e) => println!("{}", e),
+        Ok(_) => println!("Config file successfully created"),
+      }
     }
   }
 
@@ -62,17 +62,27 @@ fn main() {
     let jira: Jira = jira::jira_client(config);
 
     if let Some(matches) = matches.subcommand_matches("list-open") {
-      let project = matches.value_of("PROJECT").unwrap().to_string();
+      let issues_with_summary: Vec<String> = matches
+        .values_of("PROJECT")
+        .into_iter()
+        .flat_map(|project| project)
+        .flat_map(|project| jira::list_open(&jira, &project))
+        .collect();
 
-      for issue_with_summary in jira::list_open(&jira, &project) {
+      for issue_with_summary in issues_with_summary {
         println!("{}", issue_with_summary)
       }
     }
 
     if let Some(matches) = matches.subcommand_matches("list-all") {
-      let project = matches.value_of("PROJECT").unwrap().to_string();
+      let issues_with_summary: Vec<String> = matches
+        .values_of("PROJECT")
+        .into_iter()
+        .flat_map(|project| project)
+        .flat_map(|project| jira::list_all(&jira, &project))
+        .collect();
 
-      for issue_with_summary in jira::list_all(&jira, &project) {
+      for issue_with_summary in issues_with_summary {
         println!("{}", issue_with_summary)
       }
     }

@@ -10,7 +10,7 @@ repository = "https://github.com/brocode/fbjira"
 keywords = ["cli", "automation", "developer-tools", "jira"]
 
 [dependencies]
-goji = "0.2"
+goji = "0.2.1"
 clap = "2.31.2"
 toml = "0.4.6"
 serde = "1.0.37"
