@@ -7,7 +7,7 @@
 * Config lives @ `~/.fbjira.toml`:
 
   ```
-  jira_host = "https://<your-account>.atlassian.net"
+  jira_domain = "https://<your-account>.atlassian.net"
   jira_user = "<your-jira-user>"
   jira_token = "<your-jira-token>"
   ```

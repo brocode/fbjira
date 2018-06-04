@@ -59,7 +59,7 @@ fn main() {
 
   if let Some(matches) = matches.subcommand_matches("issue") {
     let config: Config = config::load().expect("Could not load config.");
-    let jira: Jira = jira::jira_client(config);
+    let jira: Jira = jira::jira_client(config).unwrap();
 
     if let Some(matches) = matches.subcommand_matches("list-open") {
       let issues_with_summary: Vec<String> = matches
