@@ -18,9 +18,7 @@ pub fn list_open(jira: &Jira, project: &str) -> Vec<String> {
     .iter(format!("project = {} AND status != Done ORDER BY id DESC", project), &search_options);
 
   match results {
-    Ok(results) => results
-      .map(|issue| format!("{} {}", issue.key, issue.summary().unwrap_or_default()))
-      .collect(),
+    Ok(results) => results.map(|issue| format!("{} {}", issue.key, issue.summary().unwrap_or_default())).collect(),
     Err(_) => vec![],
   }
 }
@@ -31,9 +29,7 @@ pub fn list_all(jira: &Jira, project: &str) -> Vec<String> {
   let results = jira.search().iter(format!("project = {} ORDER BY id DESC", project), &search_options);
 
   match results {
-    Ok(results) => results
-      .map(|issue| format!("{} {}", issue.key, issue.summary().unwrap_or_default()))
-      .collect(),
+    Ok(results) => results.map(|issue| format!("{} {}", issue.key, issue.summary().unwrap_or_default())).collect(),
     Err(_) => vec![],
   }
 }
