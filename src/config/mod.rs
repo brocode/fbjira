@@ -1,5 +1,5 @@
+use dirs;
 use errors::AppError;
-use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::{BufWriter, Read, Write};
 use std::path::PathBuf;
@@ -13,7 +13,7 @@ pub struct Config {
 }
 
 fn config_path() -> Result<PathBuf, AppError> {
-  match env::home_dir() {
+  match dirs::home_dir() {
     Some(home_dir) => Ok(PathBuf::from(format!("{}/.fbjira.toml", home_dir.display()))),
     None => Err(AppError::RuntimeError("Cannot read home directory".to_string())),
   }

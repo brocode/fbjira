@@ -19,7 +19,6 @@ pub fn list_open(jira: &Jira, project: &str) -> Vec<String> {
 
   match results {
     Ok(results) => results
-      .into_iter()
       .map(|issue| format!("{} {}", issue.key, issue.summary().unwrap_or_default()))
       .collect(),
     Err(_) => vec![],
@@ -33,7 +32,6 @@ pub fn list_all(jira: &Jira, project: &str) -> Vec<String> {
 
   match results {
     Ok(results) => results
-      .into_iter()
       .map(|issue| format!("{} {}", issue.key, issue.summary().unwrap_or_default()))
       .collect(),
     Err(_) => vec![],

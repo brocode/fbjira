@@ -10,10 +10,11 @@ repository = "https://github.com/brocode/fbjira"
 keywords = ["cli", "automation", "developer-tools", "jira"]
 
 [dependencies]
-goji = "0.2.1"
-clap = "2.31.2"
-toml = "0.4.6"
-serde = "1.0.66"
-serde_derive = "1.0.66"
-serde_json = "1.0.19"
-colored = "1.6"
+goji = "0.2.4"
+clap = "2.32.0"
+toml = "0.4.8"
+serde = "1.0.80"
+serde_derive = "1.0.80"
+serde_json = "1.0.32"
+colored = "1.6.1"
+dirs = "1.0.4"

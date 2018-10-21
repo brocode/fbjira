@@ -9,6 +9,8 @@ extern crate toml;
 
 extern crate colored;
 
+extern crate dirs;
+
 use clap::{App, AppSettings, Arg, SubCommand};
 use config::Config;
 use goji::Jira;
